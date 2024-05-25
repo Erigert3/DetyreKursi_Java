@@ -5,13 +5,18 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.*;
+
+import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 public class Courses extends BaseEntity{
+
+
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
@@ -24,4 +29,8 @@ public class Courses extends BaseEntity{
 
     @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     private Set<Person> persons = new HashSet<>();
+
+    public List<Person> getLecturers() {
+
+    }
 }

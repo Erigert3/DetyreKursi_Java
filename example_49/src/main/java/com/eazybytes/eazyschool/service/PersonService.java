@@ -21,6 +21,8 @@ public class PersonService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+
     public boolean createNewPerson(Person person){
         boolean isSaved = false;
         Roles role = rolesRepository.getByRoleName(EazySchoolConstants.STUDENT_ROLE);
@@ -33,4 +35,19 @@ public class PersonService {
         }
         return isSaved;
     }
+
+    public boolean createNewLecturer(Person person){
+        boolean isSaved = false;
+        Roles role = rolesRepository.getByRoleName(EazySchoolConstants.LECTURER_ROLE);
+        person.setRoles(role);
+        person.setPwd(passwordEncoder.encode(person.getPwd()));
+        person = personRepository.save(person);
+        if (null != person && person.getPersonId() > 0)
+        {
+            isSaved = true;
+        }
+        return isSaved;
+    }
+
+
 }
