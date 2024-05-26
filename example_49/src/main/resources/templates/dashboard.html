@@ -4,7 +4,11 @@ Author URL: http://w3layouts.com
 -->
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
+<<<<<<< HEAD
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+=======
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+>>>>>>> 41ad6718f127f8106610d0f782816f1ae59e9f33
 
 <head>
 <!-- Required meta tags -->
@@ -39,6 +43,7 @@ Author URL: http://w3layouts.com
 	</section>
 	<!-- //inner banner -->
 
+<<<<<<< HEAD
 	<!-- Welcome block -->
 	<section class="w3l-contact py-1" id="contact">
 		<div class="container py-md-1 py-1">
@@ -53,6 +58,126 @@ Author URL: http://w3layouts.com
 		</div>
 	</section>
 	<!-- //Welcome block -->
+=======
+<!-- Welcome block -->
+<section class="w3l-contact py-1" id="contact">
+    <div class="container py-md-1 py-1">
+        <div class="title-main text-center mx-auto mb-md-1 mb-1" style="max-width:500px;">
+            <h3 class="title-style" th:text="${'Welcome - ' + username}"></h3>
+            <p class="" th:text="${'You logged in as - ' + roles}"></p>
+            <p class="" th:if="${!#strings.isEmpty(enrolledClass)}" th:text="${'Your assigned class is - [' + enrolledClass+']'}"></p>
+        </div>
+
+    </div>
+</section>
+<!-- //Welcome block -->
+
+<div class="container py-md-5 py-4">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row m-t-25">
+                <div class="col-sm-6 col-lg-3">
+                    <a th:href="@{/displayProfile}">
+                        <div class="overview-item overview-item--c4">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Profile</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/displayMessages/page/1(sortField='name', sortDir='desc')}">
+                    <div class="overview-item overview-item--c3">
+                        <div class="overview__inner">
+                            <div class="overview-box clearfix">
+                                <div class="icon">
+                                    <i class="fas fa-envelope-open-text"></i>
+                                </div>
+                                <div class="text">
+                                    <h2>Messages</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/admin/displayClasses}">
+                        <div class="overview-item overview-item--c1">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-envelope-open-text"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Classes</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/admin/displayCourses}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-envelope-open-text"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Courses</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a th:href="@{/student/displayCourses}">
+                        <div class="overview-item overview-item--c3">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-envelope-open-text"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Courses</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/admin/addLecturer}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Add Lecturer</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+>>>>>>> 41ad6718f127f8106610d0f782816f1ae59e9f33
 
 	<div class="container py-md-5 py-4">
 		<div class="section__content section__content--p30">

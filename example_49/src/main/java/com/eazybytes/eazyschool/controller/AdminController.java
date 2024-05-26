@@ -5,10 +5,20 @@ import com.eazybytes.eazyschool.repository.CoursesRepository;
 import com.eazybytes.eazyschool.repository.EazyClassRepository;
 import com.eazybytes.eazyschool.repository.PersonRepository;
 import com.eazybytes.eazyschool.repository.RolesRepository;
+<<<<<<< HEAD
 
+=======
+import com.eazybytes.eazyschool.service.LecturerService;
+import com.eazybytes.eazyschool.service.PersonService;
+import jakarta.validation.Valid;
+>>>>>>> 41ad6718f127f8106610d0f782816f1ae59e9f33
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +26,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
+<<<<<<< HEAD
 import jakarta.validation.Valid;
+=======
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+>>>>>>> 41ad6718f127f8106610d0f782816f1ae59e9f33
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +40,9 @@ import java.util.Set;
 @Controller
 @RequestMapping("admin")
 public class AdminController {
+
+    @Autowired
+    PersonService personService;
 
     @Autowired
     EazyClassRepository eazyClassRepository;
@@ -77,6 +94,59 @@ public class AdminController {
         return "addLecturer";
     }
 
+
+    @Autowired
+    private LecturerService lecturerService;
+
+    @Autowired
+    private RolesRepository roleRepository;
+
+    @GetMapping("/addLecturer")
+    public String showAddLecturerForm(Model model) {
+        Person person = new Person();
+        List<Roles> roles = roleRepository.findAll();
+        model.addAttribute("lecturer", person);
+        model.addAttribute("roles", roles);
+        return "addLecturer";
+    }
+
+    @PostMapping("/addLecturerToCourse")
+    public ModelAndView addLecturerToCourse(Model model, @ModelAttribute("lecturer") Person lecturer, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        Courses course = (Courses) session.getAttribute("course");
+
+        // Retrieve the lecturer from the database using their email
+        Person lecturerEntity = personRepository.readByEmail(lecturer.getEmail());
+
+        // Check if the lecturer exists and has a valid ID
+        if (lecturerEntity == null || lecturerEntity.getPersonId() <= 0) {
+            modelAndView.setViewName("redirect:/admin/viewCourses?id=" + course.getCourseId() + "&error=true");
+            return modelAndView;
+        }
+
+        // Add the lecturer to the course and save changes
+        lecturerEntity.getCourses().add(course);
+        course.getLecturers().add(lecturerEntity);
+        personRepository.save(lecturerEntity);
+
+        // Update the session attribute
+        session.setAttribute("course", course);
+
+        modelAndView.setViewName("redirect:/admin/viewCourses?id=" + course.getCourseId());
+        return modelAndView;
+    }
+
+    private boolean hasRole(String role) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities() != null) {
+            for (GrantedAuthority authority : auth.getAuthorities()) {
+                if (authority.getAuthority().equals(role)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     @RequestMapping("/displayClasses")
     public ModelAndView displayClasses(Model model) {
@@ -151,6 +221,16 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/displayStudents?classId="+eazyClass.getClassId());
         return modelAndView;
     }
+
+    @GetMapping("/displayLecturers")
+    public ModelAndView displayLecturers(Model model) {
+        List<Person> lecturers = personRepository.findByRoles_RoleName("ROLE_LECTURER");
+        ModelAndView modelAndView = new ModelAndView("lecturers.html");
+        modelAndView.addObject("lecturers", lecturers);
+        modelAndView.addObject("lecturer", new Person());
+        return modelAndView;
+    }
+
 
     @GetMapping("/displayCourses")
     public ModelAndView displayCourses(Model model) {

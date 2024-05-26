@@ -72,7 +72,7 @@ public class ProfileController {
         if (!file.isEmpty()) {
             try {
                 // Define the base directory where user photos are stored
-                String baseDir = "C:\\Users\\user\\Desktop\\JAVA\\example_49\\src\\main\\resources\\static\\assets\\images"; // Change this to your actual directory path
+                String baseDir = "C:\\Users\\User\\DetyreKursi_Java\\example_49\\src\\main\\resources\\static\\assets\\images"; // Change this to your actual directory path
                 // Get the original filename
                 String originalFileName = file.getOriginalFilename();
                 // Construct the file path
