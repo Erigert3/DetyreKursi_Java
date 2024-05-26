@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Lecturer</title>
+</head>
+<body>
+    <h1>Add Lecturer</h1>
+    <form th:action="@{/admin/addLecturer}" th:object="${person}" method="post">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" th:field="*{name}" required />
+        </div>
+        <div>
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="text" id="mobileNumber" th:field="*{mobileNumber}" required />
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" required />
+        </div>
+        <div>
+            <label for="confirmEmail">Confirm Email:</label>
+            <input type="email" id="confirmEmail" th:field="*{confirmEmail}" required />
+        </div>
+        <div>
+            <label for="pwd">Password:</label>
+            <input type="password" id="pwd" th:field="*{pwd}" required />
+        </div>
+        <div>
+            <label for="confirmPwd">Confirm Password:</label>
+            <input type="password" id="confirmPwd" th:field="*{confirmPwd}" required />
+        </div>
+        <div>
+            <label for="courseId">Course:</label>
+            <select id="courseId" th:field="*{courseId}" required>
+                <option th:each="course : ${courses}" th:value="${course.courseId}" th:text="${course.courseName}">Course Name</option>
+            </select>
+        </div>
+        <button type="submit">Add Lecturer</button>
+    </form>
+</body>
+</html>

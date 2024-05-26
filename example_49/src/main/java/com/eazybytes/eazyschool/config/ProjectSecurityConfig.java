@@ -19,6 +19,7 @@ public class ProjectSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests.requestMatchers("/dashboard").authenticated()
                     .requestMatchers("/displayMessages/**").hasRole("ADMIN")
                     .requestMatchers("/closeMsg/**").hasRole("ADMIN")
+                    .requestMatchers("/admin/addLecturer").hasRole("ADMIN")
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/data-api/**").authenticated()

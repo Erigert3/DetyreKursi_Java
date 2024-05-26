@@ -4,17 +4,23 @@ import com.eazybytes.eazyschool.model.*;
 import com.eazybytes.eazyschool.repository.CoursesRepository;
 import com.eazybytes.eazyschool.repository.EazyClassRepository;
 import com.eazybytes.eazyschool.repository.PersonRepository;
+import com.eazybytes.eazyschool.repository.RolesRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Controller
@@ -26,9 +32,51 @@ public class AdminController {
 
     @Autowired
     PersonRepository personRepository;
+    
+    @Autowired
+    RolesRepository rolesRepository;
 
     @Autowired
     CoursesRepository coursesRepository;
+    
+    @PostMapping("/admin/addLecturer")
+    public ModelAndView addLecturer(@Valid @ModelAttribute("person") Person person, BindingResult result, @RequestParam("courseId") int courseId, Model model) {
+        ModelAndView modelAndView = new ModelAndView();
+        if (result.hasErrors()) {
+            modelAndView.setViewName("addLecturer");
+            return modelAndView;
+        }
+
+        // Set the role to lecturer
+        Roles lecturerRole = rolesRepository.getByRoleName("LECTURER"); // Adjust this to match your role setup
+        person.setRoles(lecturerRole);
+
+        // Fetch the course
+        Optional<Courses> courseOptional = coursesRepository.findById(courseId);
+        if (!courseOptional.isPresent()) {
+            modelAndView.setViewName("redirect:/admin/addLecturer?error=true");
+            return modelAndView;
+        }
+        Courses course = courseOptional.get();
+
+        // Assign the course to the person
+        person.getCourses().add(course);
+
+        // Save the person
+        personRepository.save(person);
+
+        // Redirect to the view lecturers page
+        modelAndView.setViewName("redirect:/admin/viewLecturers?id=" + courseId);
+        return modelAndView;
+    }
+
+    @GetMapping("/admin/addLecturer")
+    public String showAddLecturerForm(Model model) {
+        model.addAttribute("person", new Person());
+        model.addAttribute("courses", coursesRepository.findAll());
+        return "addLecturer";
+    }
+
 
     @RequestMapping("/displayClasses")
     public ModelAndView displayClasses(Model model) {
